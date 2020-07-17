@@ -1,3 +1,3 @@
 #! /bin/bash
-docker build -t sslab_clang .
-docker run -it --name sslab_clang sslab_clang
+docker start sslab_clang
+docker attach sslab_clang
