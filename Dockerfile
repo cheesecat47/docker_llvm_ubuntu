@@ -5,23 +5,27 @@ FROM cheesecat47/clang_ubuntu1804:1.0
 # ENV DEBIAN_FRONTEND noninteractive
 
 WORKDIR /
-RUN git clone https://github.com/llvm/llvm-project.git
-# RUN cd /llvm-project && \
-#     mkdir build
+RUN git clone https://github.com/llvm/llvm-project.git && \
+	cd /llvm-project && \
+    mkdir build
     
-# WORKDIR /llvm-project/build
+WORKDIR /llvm-project/build
 
-# RUN cmake -DLLVM_ENABLE_PROJECTS=clang -G "Unix Makefiles" ../llvm
+RUN cmake -DLLVM_ENABLE_PROJECTS=clang -G "Unix Makefiles" ../llvm
 
-# RUN make clang
+RUN make clang
 
-# RUN echo "export PATH=$PATH:/llvm-project/build/bin" >> ~/.profile && \
-#     source ~/.profile
+RUN path=/llvm-project/build/bin && \
+	bashrc=~/.bashrc && \
+	echo $PATH | grep -q "\(^\|:\)$path\(:\|/\{0,1\}$\)" || echo "PATH=\$PATH:$path" >> "$bashrc"; . "$bashrc"
+#	echo "export PATH=$PATH:/llvm-project/build/bin" >> ~/.bashrc && \
+#   source ~/.bashrc
 
-# RUN clang --version
+RUN cd /llvm-project/build/bin && \
+	./clang --version
 
 # RUN make check-clang
 
-# RUN apt-get clean
+RUN apt-get clean
 
 CMD [ "/bin/bash" ]
